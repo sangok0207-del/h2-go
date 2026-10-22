@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>길안내 열기</title>
+<style>
+  body { margin: 0; padding: 24px 16px; background: #0b0d12; color: #eef1f5; font-family: sans-serif; text-align: center; }
+  h1 { font-size: 30px; margin: 12px 0 28px; word-break: keep-all; }
+  a.btn { display: block; margin: 14px auto; max-width: 420px; padding: 22px 12px; border-radius: 16px; font-size: 26px; font-weight: bold; text-decoration: none; color: #fff; }
+  .naver { background: #03c75a; } .tmap { background: #2d6bff; } .kakao { background: #fee500; color: #191919 !important; }
+  p { color: #9aa3b0; font-size: 18px; }
+</style>
+</head>
+<body>
+<h1 id="t">길안내 여는 중…</h1>
+<a class="btn naver" id="naver">네이버지도로 길안내</a>
+<a class="btn tmap" id="tmap">티맵으로 길안내</a>
+<a class="btn kakao" id="kakao">카카오맵으로 길안내</a>
+<p>앱이 자동으로 안 열리면 위 버튼을 누르세요.</p>
+<script>
+  // 사용: ?app=naver|tmap|kakao&lat=37.5&lng=126.9&name=충전소이름  (출발지 = 현재 위치)
+  var q = new URLSearchParams(location.search);
+  var lat = q.get('lat'), lng = q.get('lng'), name = q.get('name') || '목적지', app = q.get('app');
+  var n = encodeURIComponent(name);
+  var urls = {
+    naver: 'nmap://route/car?dlat=' + lat + '&dlng=' + lng + '&dname=' + n + '&appname=uri-ict.h2go',
+    tmap: 'tmap://route?goalname=' + n + '&goalx=' + lng + '&goaly=' + lat,
+    kakao: 'https://map.kakao.com/link/to/' + n + ',' + lat + ',' + lng
+  };
+  document.getElementById('t').textContent = name;
+  for (var k in urls) document.getElementById(k).href = urls[k];
+  if (lat && lng && urls[app]) location.href = urls[app];
+</script>
+</body>
+</html>
